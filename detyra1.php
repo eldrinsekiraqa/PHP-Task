@@ -4,7 +4,13 @@ if(!file_exists($argv[1])){
     die ("File doesn't exist");
 }
 
-foreach (explode("\n", file_get_contents($argv[1])) as $row) {
+$rows = explode("\n", file_get_contents($argv[1]));
+
+if(count($rows)==0){
+    die("Now rows to check");
+}
+
+foreach ($rows as $row) {
 
     if (empty($row)) break;
     $row = json_decode($row, true);
@@ -23,45 +29,14 @@ foreach (explode("\n", file_get_contents($argv[1])) as $row) {
         $amntFixed =$row["amount"] / $rate;
     }
 
-    echo $amntFixed * ($isEu == 'yes' ? 0.01 : 0.02);
+    echo $amntFixed * ($isEu ? 0.01 : 0.02);
     print "\n";
 }
 
 function isEu($c) {
-    $result = false;
-    switch($c) {
-        case 'AT':
-        case 'BE':
-        case 'BG':
-        case 'CY':
-        case 'CZ':
-        case 'DE':
-        case 'DK':
-        case 'EE':
-        case 'ES':
-        case 'FI':
-        case 'FR':
-        case 'GR':
-        case 'HR':
-        case 'HU':
-        case 'IE':
-        case 'IT':
-        case 'LT':
-        case 'LU':
-        case 'LV':
-        case 'MT':
-        case 'NL':
-        case 'PO':
-        case 'PT':
-        case 'RO':
-        case 'SE':
-        case 'SI':
-        case 'SK':
-            $result = 'yes';
-            return $result;
-        default:
-            $result = 'no';
+    $currencies  = ['AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI','FR','FR','GR','HR','HU','IE','IT','LT','LU','LV','MT','NL','PO','PT','RO','SE','SI','SK'];
+   return in_array($c, $currencies);
+        
     }
-    return $result;
-}
+
 ?>
